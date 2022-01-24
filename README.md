@@ -1,0 +1,2 @@
+# pysideprojekti
+PySide2
