@@ -1,5 +1,5 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 from quiz_ui import Ui_MainWindow
 
@@ -28,6 +28,8 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.vaihda_kysymys_ja_vastaukset(0)
         self.kytke_napit()
+        self.pisteet = 0
+        self.indeksi = 0
                 
     def vaihda_kysymys_ja_vastaukset(self, indeksi):
         tekstit = KYSYMYKSET_JA_VASTAUKSET[indeksi]
@@ -74,8 +76,18 @@ class MainWindow(QMainWindow):
         
         if nappi == self.oikea_vastaus:
             print('Oikein!')
-            
-        print('Nappia painettu!')
+            self.pisteet += 1
+        
+        self.indeksi += 1
+        if self.indeksi >= len(KYSYMYKSET_JA_VASTAUKSET):
+            laatikko = QMessageBox(self)
+            laatikko.setText(f'Peli päättyi! Sait {self.pisteet} pistettä.')
+            laatikko.exec()
+            self.indeksi = 0
+            self.pisteet = 0
+        
+        self.vaihda_kysymys_ja_vastaukset(self.indeksi)            
+        
                
 if __name__ == "__main__":
     app = QApplication(sys.argv)
